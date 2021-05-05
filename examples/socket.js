@@ -1,7 +1,7 @@
 import { Error, strerror } from 'std';
 import { read, write, close, setReadHandler, setWriteHandler } from 'os';
 import { O_NONBLOCK, F_GETFL, F_SETFL, fcntl } from './fcntl.js';
-import { debug, dlopen, define, dlerror, dlclose, dlsym, call, toString, toArrayBuffer, errno, JSContext, RTLD_LAZY, RTLD_NOW, RTLD_GLOBAL, RTLD_LOCAL, RTLD_NODELETE, RTLD_NOLOAD, RTLD_DEEPBIND, RTLD_DEFAULT, RTLD_NEXT, argSize, ptrSize } from 'ffi';
+import { debug, dlopen, define, dlerror, dlclose, dlsym, call, toString, toArrayBuffer, errno, JSContext, RTLD_LAZY, RTLD_NOW, RTLD_GLOBAL, RTLD_LOCAL, RTLD_NODELETE, RTLD_NOLOAD, RTLD_DEEPBIND, RTLD_DEFAULT, RTLD_NEXT, argSize, pointerSize } from 'ffi';
 
 function foreign(name, ret, ...args) {
     let fp = dlsym(RTLD_DEFAULT, name);
@@ -183,7 +183,7 @@ export function select(nfds,
     timeout = null
 ) {
     if(!(typeof nfds == 'number')) {
-        let maxfd = Math.max(...[readfds, writefds, exceptfds] .filter(s => s instanceof fd_set) .map(s => s.maxfd) );
+        let maxfd = Math.max(...[readfds, writefds, exceptfds].filter(s => s instanceof fd_set).map(s => s.maxfd));
         nfds = maxfd + 1;
     }
     return syscall.select(nfds, readfds, writefds, exceptfds, timeout);
@@ -208,11 +208,11 @@ export function setsockopt(sockfd, level, optname, optval, optlen) {
 }
 
 export class timeval extends ArrayBuffer {
-    static arrType = ptrSize == 8 ? BigUint64Array : Uint32Array;
-    static numType = ptrSize == 8 ? BigInt : n => n;
+    static arrType = pointerSize == 8 ? BigUint64Array : Uint32Array;
+    static numType = pointerSize == 8 ? BigInt : n => n;
 
     constructor(sec, usec) {
-        super(ptrSize * 2);
+        super(pointerSize * 2);
 
         if(sec !== undefined || usec !== undefined) {
             let a = new timeval.arrType(this);
@@ -367,8 +367,7 @@ export class Socket {
         let ret;
         if(addr != undefined) this.remoteAddress = addr;
         if(port != undefined) this.remotePort = port;
-        if((ret = connect(this.fd, this.remote, this.remote.byteLength)) == -1
-        ) {
+        if((ret = connect(this.fd, this.remote, this.remote.byteLength)) == -1) {
             this.errno = syscall.errno;
             if(this.errno == EINPROGRESS) this.connecting = true;
         }

@@ -1,4 +1,4 @@
-32qjs-ffi
+qjs-ffi
 =======
 
 ## What is it? ##

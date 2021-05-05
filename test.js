@@ -221,7 +221,7 @@ console.log('  toString = "' + toString(buf.addressOf()));
 str = call('strncpy', buf, 'pears, cherries, limes, bananas, lemons, melons, oranges, apples', buf.byteLength);
 console.log('str =', toString(str));
 
-let token, saveptr = new ArrayBuffer(ptrSize);
+let token, saveptr = new ArrayBuffer(pointerSize);
 let strings = new BigUint64Array(8);
 console.log('saveptr.addressOf() =', saveptr.addressOf());
 let array = [];

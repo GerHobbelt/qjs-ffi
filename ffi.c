@@ -821,9 +821,7 @@ static const JSCFunctionListEntry js_funcs[] = {
 #endif
     JS_PROP_INT32_DEF("argSize", FFI_SIZEOF_ARG, JS_PROP_CONFIGURABLE),
     JS_PROP_INT32_DEF("pointerSize", sizeof(void*), JS_PROP_CONFIGURABLE),
-#ifdef __BYTE_ORDER__
     JS_PROP_INT32_DEF("littleEndian", __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__, JS_PROP_CONFIGURABLE),
-#endif
 };
 
 
