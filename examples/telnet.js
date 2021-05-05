@@ -33,7 +33,7 @@ import {
 } from './term.js';
 
 function not(n) {
-    return ~n >>> 0;
+  return ~n >>> 0;
 }
 
 const STDIN_FILENO = 0,
