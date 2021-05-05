@@ -122,8 +122,7 @@ export const SOL_SOCKET = 1;
 /* prettier-ignore */
 const syscall = { socket: foreign('socket', 'int', 'int', 'int', 'int'), select: foreign( 'select', 'int', 'int', 'buffer', 'buffer', 'buffer', 'buffer' ), connect: foreign('connect', 'int', 'int', 'void *', 'size_t'), bind: foreign('bind', 'int', 'int', 'void *', 'size_t'), listen: foreign('listen', 'int', 'int', 'int'), accept: foreign('accept', 'int', 'int', 'buffer', 'buffer'), getsockopt: foreign( 'getsockopt', 'int', 'int', 'int', 'int', 'void *', 'buffer' ), setsockopt: foreign( 'setsockopt', 'int', 'int', 'int', 'int', 'void *', 'size_t' ), recv: foreign('recv', 'int', 'int', 'buffer', 'size_t', 'int'), recvfrom: foreign( 'recvfrom', 'int', 'int', 'buffer', 'size_t', 'int', 'buffer', 'buffer' ), send: foreign('send', 'int', 'int', 'buffer', 'size_t', 'int'), sendto: foreign( 'sendto', 'int', 'int', 'buffer', 'size_t', 'int', 'buffer', 'size_t' ) };
 
-export const errnos = Object.fromEntries(Object.getOwnPropertyNames(Error).map(name => [Error[name], name])
-);
+export const errnos = Object.fromEntries(Object.getOwnPropertyNames(Error).map(name => [Error[name], name]));
 
 export function socket(af = AF_INET, type = SOCK_STREAM, proto = IPPROTO_IP) {
     return syscall.socket(af, type, proto);
@@ -430,8 +429,14 @@ export class Socket {
         return syscall.recvfrom(this.fd, buf, len, flags, src_addr, addrlen);
     }
 
-    sendto(buf, len, flags = 0, src_addr = null, addrlen = 0) {
-        return syscall.sendto(this.fd, buf, len, flags, dest_addr, addrlen);
+    sendto(buf, len, flags = 0, dest_addr = null, addrlen) {
+        return syscall.sendto(this.fd,
+            buf,
+            len,
+            flags,
+            dest_addr,
+            addrlen === undefined ? dest_addr.byteLength : addrlen
+        );
     }
 
     close() {

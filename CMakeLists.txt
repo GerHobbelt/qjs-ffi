@@ -106,8 +106,7 @@ endif(BUILD_SHARED_LIBS)
 add_library(quickjs-ffi MODULE ${JS_BINDINGS_SOURCES})
 target_include_directories(quickjs-ffi PRIVATE)
 set_target_properties(quickjs-ffi PROPERTIES PREFIX "" OUTPUT_NAME "ffi")
-target_compile_definitions(quickjs-ffi PRIVATE -DJS_SHARED_LIBRARY=1
-                                               -DJS_BINDINGS_INIT_MODULE=1)
+target_compile_definitions(quickjs-ffi PRIVATE -DJS_SHARED_LIBRARY=1 -DJS_BINDINGS_INIT_MODULE=1)
 target_link_libraries(quickjs-ffi PUBLIC ${FFI_LIBRARIES} dl)
 
 install(
